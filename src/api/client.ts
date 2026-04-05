@@ -86,14 +86,27 @@ export class DocsStudioClient {
   private userId: string;
 
   constructor(apiUrl: string, userId: string) {
-    // Normalize URL - remove trailing slash
-    this.apiUrl = apiUrl.replace(/\/+$/, "");
+    this.apiUrl = DocsStudioClient.validateUrl(apiUrl);
     this.userId = userId;
   }
 
   updateConfig(apiUrl: string, userId: string): void {
-    this.apiUrl = apiUrl.replace(/\/+$/, "");
+    this.apiUrl = DocsStudioClient.validateUrl(apiUrl);
     this.userId = userId;
+  }
+
+  private static validateUrl(raw: string): string {
+    const trimmed = raw.replace(/\/+$/, "");
+    try {
+      const parsed = new URL(trimmed);
+      if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
+        throw new Error("API URL must use http or https");
+      }
+      return `${parsed.protocol}//${parsed.host}${parsed.pathname}`;
+    } catch (e) {
+      if (e instanceof Error && e.message.includes("http")) throw e;
+      throw new Error(`Invalid API URL: ${trimmed}`);
+    }
   }
 
   private async request<T>(
@@ -253,6 +266,48 @@ export class DocsStudioClient {
       path += `&node_types=${nodeTypes.join(",")}`;
     }
     return this.request("GET", path);
+  }
+
+  // ─── Context Injection (server-formatted) ───────────────────────
+
+  async injectContextForFile(
+    filePath: string,
+    fileContent: string,
+    options?: {
+      query?: string;
+      maxTokens?: number;
+      format?: string;
+      projectIds?: string[];
+    }
+  ): Promise<{
+    context: string;
+    total_tokens: number;
+    format: string;
+    matched_projects: Array<{
+      project_id: string;
+      project_name: string;
+      base_url: string;
+      match_score: number;
+      matched_deps: string[];
+    }>;
+    slices: Array<{
+      project_id: string;
+      project_name: string;
+      context_type: string;
+      relevance_score: number;
+      content: string;
+      token_estimate: number;
+    }>;
+    metadata: Record<string, unknown>;
+  }> {
+    return this.request("POST", "/context-inject/for-file", {
+      file_path: filePath,
+      file_content: fileContent,
+      query: options?.query || "",
+      max_tokens: options?.maxTokens || 4000,
+      format: options?.format || "markdown",
+      project_ids: options?.projectIds || null,
+    });
   }
 
   // ─── Health Check ────────────────────────────────────────────────

@@ -28,9 +28,10 @@ async function main() {
     entryPoints: ["src/extension.ts"],
     bundle: true,
     format: "cjs",
-    minify: production,
+    minify: false,
     sourcemap: !production,
     sourcesContent: false,
+    keepNames: true,
     platform: "node",
     outfile: "dist/extension.js",
     external: ["vscode"],
@@ -43,24 +44,6 @@ async function main() {
   } else {
     await ctx.rebuild();
     await ctx.dispose();
-  }
-
-  // Build MCP server as separate entry (for standalone use, not included in VSIX)
-  if (!watch) {
-    const mcpCtx = await esbuild.context({
-      entryPoints: ["src/mcp-server.ts"],
-      bundle: true,
-      format: "cjs",
-      minify: production,
-      sourcemap: !production,
-      sourcesContent: false,
-      platform: "node",
-      outfile: "dist/mcp-server.js",
-      external: [],
-      logLevel: "warning",
-    });
-    await mcpCtx.rebuild();
-    await mcpCtx.dispose();
   }
 }
 

@@ -13,7 +13,7 @@
 
 import * as vscode from "vscode";
 import { DocsStudioClient } from "./api/client";
-import { ContextSelector, SelectedContext } from "./context/selector";
+import { ContextSelector } from "./context/selector";
 import {
   detectManifestDependencies,
   getUniqueDependencyNames,
@@ -32,8 +32,6 @@ let matchedProjects: Map<string, { id: string; name: string; base_url: string }>
   new Map();
 let detectedDeps: string[] = [];
 let isConnected = false;
-let lastContextInjection: SelectedContext | null = null;
-
 // Debounce timers
 let fileChangeTimer: ReturnType<typeof setTimeout> | undefined;
 let contextRefreshTimer: ReturnType<typeof setTimeout> | undefined;
@@ -80,7 +78,6 @@ export function activate(context: vscode.ExtensionContext) {
       "docsstudio.getFileContext",
       cmdInjectContext
     ),
-    vscode.commands.registerCommand("docsstudio.startMcp", cmdStartMcp),
     vscode.commands.registerCommand("docsstudio.configure", cmdConfigure)
   );
 
@@ -379,8 +376,6 @@ async function cmdInjectContext() {
           projectIds.length > 0 ? projectIds : undefined
         );
 
-        lastContextInjection = ctx;
-
         if (!ctx.text || ctx.itemCount === 0) {
           vscode.window.showInformationMessage(
             "No relevant documentation context found for this file."
@@ -416,37 +411,6 @@ async function cmdInjectContext() {
       }
     }
   );
-}
-
-async function cmdStartMcp() {
-  const config = vscode.workspace.getConfiguration("docsstudio");
-  const userId = config.get<string>("userId", "");
-  const apiUrl = config.get<string>("apiUrl", "https://docsstudio.dev/api");
-
-  if (!userId) {
-    vscode.window.showWarningMessage(
-      "Please configure your DocsStudio User ID first."
-    );
-    await cmdConfigure();
-    return;
-  }
-
-  // The MCP server is auto-started via package.json mcpServers contribution.
-  // This command provides info and manual restart capabilities.
-  const action = await vscode.window.showInformationMessage(
-    `DocsStudio MCP server is configured.\n\nAPI: ${apiUrl}\nUser: ${userId ? "Set" : "Not set"}\n\nThe server auto-starts when your AI client requests it via MCP.`,
-    "View Config",
-    "Open Output"
-  );
-
-  if (action === "View Config") {
-    await vscode.commands.executeCommand(
-      "workbench.action.openSettings",
-      "docsstudio"
-    );
-  } else if (action === "Open Output") {
-    outputChannel.show();
-  }
 }
 
 async function cmdConfigure() {

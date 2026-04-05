@@ -1,23 +1,22 @@
 {
   "name": "docsstudio-extension",
   "displayName": "DocsStudio - Live Documentation Context",
-  "description": "Detects your project dependencies, matches them to indexed documentation, and delivers relevant context to your AI coding sessions via MCP.",
-  "version": "1.0.1",
+  "description": "Detects your project dependencies, matches them to indexed documentation in DocsStudio, and delivers relevant context to your AI coding sessions.",
+  "version": "2.0.0",
   "publisher": "DocsStudioAIDocumentationEngine",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/OfficialPr0x/DocsStudioAIDocumentationEngine"
+    "url": "https://github.com/OfficialPr0x/docsstudio-extension"
   },
-  "homepage": "https://docsstudio.dev",
+  "homepage": "https://github.com/OfficialPr0x/docsstudio-extension",
   "bugs": {
-    "url": "https://github.com/OfficialPr0x/DocsStudioAIDocumentationEngine/issues"
+    "url": "https://github.com/OfficialPr0x/docsstudio-extension/issues"
   },
   "engines": {
     "vscode": "^1.93.0"
   },
   "categories": [
-    "Machine Learning",
     "Other"
   ],
   "pricing": "Free",
@@ -26,10 +25,10 @@
     "theme": "dark"
   },
   "keywords": [
-    "mcp",
     "documentation",
     "context",
-    "ai"
+    "ai",
+    "api-docs"
   ],
   "activationEvents": [],
   "main": "./dist/extension.js",
@@ -51,10 +50,6 @@
       {
         "command": "docsstudio.getFileContext",
         "title": "DocsStudio: Get Context for Current File"
-      },
-      {
-        "command": "docsstudio.startMcp",
-        "title": "DocsStudio: Start MCP Server"
       },
       {
         "command": "docsstudio.configure",
@@ -90,7 +85,6 @@
     "lint": "eslint src --ext ts"
   },
   "devDependencies": {
-    "@modelcontextprotocol/sdk": "^1.12.1",
     "@types/node": "^22.0.0",
     "@types/vscode": "^1.93.0",
     "esbuild": "^0.24.0",

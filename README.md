@@ -5,7 +5,7 @@
 ## What It Does
 
 1. **Detects** your dependencies from `package.json`, `requirements.txt`, `go.mod`, `Cargo.toml`, etc.
-2. **Matches** them against documentation you've indexed in DocsStudio
+2. **Matches** them against documentation you've indexed in [DocsStudio](https://github.com/OfficialPr0x/DocsStudioAIDocumentationEngine)
 3. **Delivers** the right context — auth flows, endpoints, schemas, error codes — via commands in VS Code
 
 ## Setup
@@ -33,7 +33,6 @@ The extension works with documentation you've already indexed in DocsStudio. Mak
 | `DocsStudio: Show Matched Projects` | View which docs match your workspace |
 | `DocsStudio: Search Documentation` | Search across all indexed docs |
 | `DocsStudio: Get Context for Current File` | Surface relevant docs for your active file |
-| `DocsStudio: Start MCP Server` | View MCP server status |
 
 ## How It Works
 
@@ -45,6 +44,10 @@ Context is prioritized by relevance:
 - **Schemas** — data models for request/response
 - **Error codes** — what can go wrong
 - **Webhooks** — event-driven flows
+
+## MCP Server
+
+For MCP (Model Context Protocol) integration with Cursor, Claude Desktop, or VS Code Copilot, use the standalone Python MCP server provided in the [DocsStudio backend repository](https://github.com/OfficialPr0x/DocsStudioAIDocumentationEngine). See `mcp_server.py` for setup instructions.
 
 ## Requirements
 
@@ -62,7 +65,6 @@ Context is prioritized by relevance:
 ## Development
 
 ```bash
-cd vscode-extension
 npm install
 npm run compile    # Build once
 npm run watch      # Watch mode
@@ -72,7 +74,6 @@ npm run watch      # Watch mode
 
 ```bash
 npm install -g @vscode/vsce
-cd vscode-extension
 npm install
 npx @vscode/vsce package
 ```

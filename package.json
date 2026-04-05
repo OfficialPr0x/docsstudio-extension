@@ -1,0 +1,99 @@
+{
+  "name": "docsstudio-extension",
+  "displayName": "DocsStudio - Live Documentation Context",
+  "description": "Detects your project dependencies, matches them to indexed documentation, and delivers relevant context to your AI coding sessions via MCP.",
+  "version": "1.0.1",
+  "publisher": "DocsStudioAIDocumentationEngine",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OfficialPr0x/DocsStudioAIDocumentationEngine"
+  },
+  "homepage": "https://docsstudio.dev",
+  "bugs": {
+    "url": "https://github.com/OfficialPr0x/DocsStudioAIDocumentationEngine/issues"
+  },
+  "engines": {
+    "vscode": "^1.93.0"
+  },
+  "categories": [
+    "Machine Learning",
+    "Other"
+  ],
+  "pricing": "Free",
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  },
+  "keywords": [
+    "mcp",
+    "documentation",
+    "context",
+    "ai"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "icon": "media/icon.png",
+  "contributes": {
+    "commands": [
+      {
+        "command": "docsstudio.refreshContext",
+        "title": "DocsStudio: Refresh Context"
+      },
+      {
+        "command": "docsstudio.showProjects",
+        "title": "DocsStudio: Show Matched Projects"
+      },
+      {
+        "command": "docsstudio.searchDocs",
+        "title": "DocsStudio: Search Documentation"
+      },
+      {
+        "command": "docsstudio.getFileContext",
+        "title": "DocsStudio: Get Context for Current File"
+      },
+      {
+        "command": "docsstudio.startMcp",
+        "title": "DocsStudio: Start MCP Server"
+      },
+      {
+        "command": "docsstudio.configure",
+        "title": "DocsStudio: Configure API Settings"
+      }
+    ],
+    "configuration": {
+      "title": "DocsStudio",
+      "properties": {
+        "docsstudio.apiUrl": {
+          "type": "string",
+          "default": "https://docsstudio.dev/api",
+          "description": "DocsStudio backend API URL"
+        },
+        "docsstudio.userId": {
+          "type": "string",
+          "default": "",
+          "description": "Your Clerk user ID for authentication"
+        },
+        "docsstudio.maxContextTokens": {
+          "type": "number",
+          "default": 8000,
+          "description": "Maximum tokens to include in context delivery"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "package": "node esbuild.mjs --production",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "@types/node": "^22.0.0",
+    "@types/vscode": "^1.93.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.7.0"
+  }
+}

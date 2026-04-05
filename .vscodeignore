@@ -1,0 +1,10 @@
+.vscode/**
+src/**
+tsconfig.json
+esbuild.mjs
+node_modules/**
+**/*.map
+**/*.ts
+media/icon.svg
+.gitignore
+dist/mcp-server.js
